@@ -74,7 +74,7 @@ def add_motion_blur(image, kernel_size, angle):
     :param angle: angle of the blur-line
     :return: blurred image, clipped to [0,1]
     """
-    kernel = sol5_utils.motion_blur_kernel(kernel_size, angle)
+    kernel = utill_functions.motion_blur_kernel(kernel_size, angle)
     convolved = convolve(image, kernel)
     return np.clip(nearest_fraction(convolved, 1 / 255), 0, 1)
 
@@ -287,7 +287,7 @@ def learn_denoising_model(num_res_blocks=5, quick_mode=False):
     :return: Keras trained denoising model
     """
     gauss = lambda x: add_gaussian_noise(x, 0, 0.2)
-    images = sol5_utils.images_for_denoising()
+    images = utill_functions.images_for_denoising()
     model = build_nn_model(CROP_SIZE_FOR_DENOISING[0], CROP_SIZE_FOR_DENOISING[1], DENOISING_NUM_CHANNELS,
                            num_res_blocks)
     if quick_mode:
@@ -309,7 +309,7 @@ def learn_deblurring_model(num_res_blocks=5, quick_mode=False):
     :return: Keras trained deblurring model
     """
     blurr = lambda x: random_motion_blur(x, BLURRING_KERNEL_SIZES)
-    images = sol5_utils.images_for_deblurring()
+    images = utill_functions.images_for_deblurring()
     model = build_nn_model(CROP_SIZE_FOR_DEBLURRING[0], CROP_SIZE_FOR_DEBLURRING[1], DEBLURRING_NUM_CHANNELS,
                            num_res_blocks)
     if quick_mode:
